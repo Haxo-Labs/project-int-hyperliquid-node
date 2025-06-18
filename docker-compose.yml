@@ -14,7 +14,8 @@ services:
     build: ./pruner
     volumes:
       - hl-data:/home/hluser/hl/data
-
+      - /data:/app/data
+      - ./override_gossip_config.json:/home/hluser/override_gossip_config.json
 
 volumes:
   hl-data:
