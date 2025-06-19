@@ -4,7 +4,7 @@ ARG USERNAME=hluser
 ARG USER_UID=10000
 ARG USER_GID=$USER_UID
 
-# Define URLs for Mainnet
+# Define URLs as environment variables
 ARG PUB_KEY_URL=https://raw.githubusercontent.com/hyperliquid-dex/node/refs/heads/main/pub_key.asc
 ARG HL_VISOR_URL=https://binaries.hyperliquid.xyz/Mainnet/hl-visor
 ARG HL_VISOR_ASC_URL=https://binaries.hyperliquid.xyz/Mainnet/hl-visor.asc
@@ -19,8 +19,8 @@ RUN groupadd --gid $USER_GID $USERNAME \
 USER $USERNAME
 WORKDIR /home/$USERNAME
 
-# Create visor.json for Mainnet and child args
-RUN echo '{ "chain": "Mainnet"}' > /home/$USERNAME/visor.json
+# Configure chain to testnet
+RUN echo '{"chain": "Mainnet"}' > /home/$USERNAME/visor.json
 
 # Import GPG public key
 RUN curl -o /home/$USERNAME/pub_key.asc $PUB_KEY_URL \
@@ -35,5 +35,5 @@ RUN curl -o /home/$USERNAME/hl-visor $HL_VISOR_URL \
 # Expose gossip ports
 EXPOSE 4000-4010
 
-# Run a non-validating node using visor.json
-ENTRYPOINT ["/home/hluser/hl-visor", "run-non-validator", "--replica-cmds-style", "recent-actions"]
+# Run a non-validating node
+ENTRYPOINT ["/home/hluser/hl-visor", "run-non-validator", "--write-trades", "--replica-cmds-style", "recent-actions"]

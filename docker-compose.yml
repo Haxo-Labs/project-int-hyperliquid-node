@@ -2,19 +2,17 @@ name: "hyperliquid"
 
 services:
   node:
+    platform: linux/amd64
     restart: unless-stopped
     build: .
     ports:
       - "4000-4010:4000-4010"
     volumes:
-      - hl-data:/home/hluser/hl/data
+      - ./hl-data:/home/hluser/hl/data
+      - ./override_gossip_config.json:/home/hluser/override_gossip_config.json
 
   pruner:
     restart: unless-stopped
     build: ./pruner
     volumes:
-      - hl-data:/home/hluser/hl/data
-
-volumes:
-  hl-data:
-    driver: local
+      - ./hl-data:/home/hluser/hl/data
