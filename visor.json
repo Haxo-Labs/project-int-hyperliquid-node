@@ -1,0 +1,5 @@
+{
+  "chain": "Mainnet",
+  "childBinary": "/home/hluser/hl-node",
+  "childArgs": ["run-non-validator", "--write-trades", "--replica-cmds-style", "recent-actions"]
+}
