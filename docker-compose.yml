@@ -8,6 +8,7 @@ services:
       - "4000-4010:4000-4010"
     volumes:
       - hl-data:/home/hluser/hl/data
+      - ./visor.json:/home/hluser/visor.json
 
   pruner:
     restart: unless-stopped
