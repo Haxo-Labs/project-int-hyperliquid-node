@@ -30,7 +30,8 @@ RUN curl -o /home/$USERNAME/pub_key.asc $PUB_KEY_URL \
 RUN curl -o /home/$USERNAME/hl-visor $HL_VISOR_URL \
     && curl -o /home/$USERNAME/hl-visor.asc $HL_VISOR_ASC_URL \
     && gpg --verify /home/$USERNAME/hl-visor.asc /home/$USERNAME/hl-visor \
-    && chmod +x /home/$USERNAME/hl-visor
+    && chmod +x /home/$USERNAME/hl-visor \
+    && cp /home/$USERNAME/hl-visor /home/$USERNAME/hl-node
 
 # Expose gossip ports
 EXPOSE 4000-4010
