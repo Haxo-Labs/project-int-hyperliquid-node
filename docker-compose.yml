@@ -9,6 +9,7 @@ services:
       - "4000-4010:4000-4010"
     volumes:
       - ./hl-data:/home/hluser/hl/data
+      - ./override_gossip_config.json:/home/hluser/override_gossip_config.json
 
   pruner:
     restart: unless-stopped
