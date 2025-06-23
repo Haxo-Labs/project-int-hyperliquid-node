@@ -14,12 +14,15 @@ RUN groupadd --gid $USER_GID $USERNAME \
     && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
     && apt-get update -y && apt-get install -y curl gnupg \
     && apt-get clean && rm -rf /var/lib/apt/lists/* \
-    && mkdir -p /home/$USERNAME/hl/data && chown -R $USERNAME:$USERNAME /home/$USERNAME/hl
+    && mkdir -p /home/$USERNAME/hl/data/logs \
+    && ln -s /home/$USERNAME/hl/data/logs /home/$USERNAME/hl/log \
+    && chown -R $USERNAME:$USERNAME /home/$USERNAME/hl
 
+# Switch to non-root user
 USER $USERNAME
 WORKDIR /home/$USERNAME
 
-# Configure chain to testnet
+# Configure chain
 RUN echo '{"chain": "Mainnet"}' > /home/$USERNAME/visor.json
 
 # Import GPG public key
