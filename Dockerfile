@@ -23,7 +23,8 @@ USER $USERNAME
 WORKDIR /home/$USERNAME
 
 # Configure chain
-RUN echo '{"chain": "Mainnet"}' > /data/hyperliquid/visor.json
+RUN mkdir -p /data/hyperliquid \
+    && echo '{"chain": "Mainnet"}' > /data/hyperliquid/visor.json
 
 # Import GPG public key
 RUN curl -o /data/hyperliquid/pub_key.asc $PUB_KEY_URL \
@@ -39,4 +40,4 @@ RUN curl -o /data/hyperliquid/hl-visor $HL_VISOR_URL \
 EXPOSE 4000-4010
 
 # Run a non-validating node
-ENTRYPOINT ["/home/hluser/hl-visor", "run-non-validator", "--write-trades", "--replica-cmds-style", "recent-actions"]
+ENTRYPOINT ["/data/hyperliquid/hl-visor", "run-non-validator", "--write-trades", "--replica-cmds-style", "recent-actions"]
