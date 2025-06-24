@@ -14,26 +14,26 @@ RUN groupadd --gid $USER_GID $USERNAME \
     && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
     && apt-get update -y && apt-get install -y curl gnupg \
     && apt-get clean && rm -rf /var/lib/apt/lists/* \
-    && mkdir -p /home/$USERNAME/hl/data/logs \
-    && ln -s /home/$USERNAME/hl/data/logs /home/$USERNAME/hl/log \
-    && chown -R $USERNAME:$USERNAME /home/$USERNAME/hl
+    && mkdir -p /data/hyperliquid/hl/data/logs \
+    && ln -s /data/hyperliquid/hl/data/logs /data/hyperliquid/hl/log \
+    && chown -R $USERNAME:$USERNAME /data/hyperliquid/hl
 
 # Switch to non-root user
 USER $USERNAME
 WORKDIR /home/$USERNAME
 
 # Configure chain
-RUN echo '{"chain": "Mainnet"}' > /home/$USERNAME/visor.json
+RUN echo '{"chain": "Mainnet"}' > /data/hyperliquid/visor.json
 
 # Import GPG public key
-RUN curl -o /home/$USERNAME/pub_key.asc $PUB_KEY_URL \
-    && gpg --import /home/$USERNAME/pub_key.asc
+RUN curl -o /data/hyperliquid/pub_key.asc $PUB_KEY_URL \
+    && gpg --import /data/hyperliquid/pub_key.asc
 
 # Download and verify hl-visor binary
-RUN curl -o /home/$USERNAME/hl-visor $HL_VISOR_URL \
-    && curl -o /home/$USERNAME/hl-visor.asc $HL_VISOR_ASC_URL \
-    && gpg --verify /home/$USERNAME/hl-visor.asc /home/$USERNAME/hl-visor \
-    && chmod +x /home/$USERNAME/hl-visor
+RUN curl -o /data/hyperliquid/hl-visor $HL_VISOR_URL \
+    && curl -o /data/hyperliquid/hl-visor.asc $HL_VISOR_ASC_URL \
+    && gpg --verify /data/hyperliquid/hl-visor.asc /data/hyperliquid/hl-visor \
+    && chmod +x /data/hyperliquid/hl-visor
 
 # Expose gossip ports
 EXPOSE 4000-4010

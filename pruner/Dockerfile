@@ -8,16 +8,16 @@ ARG USER_GID=$USER_UID
 RUN groupadd --gid $USER_GID $USERNAME \
     && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
     && apt-get update -y && apt-get install curl cron procps -y \
-    && mkdir -p /home/$USERNAME/hl/data && mkdir -p /home/$USERNAME/scripts && chown -R $USERNAME:$USERNAME /home/$USERNAME/hl
+    && mkdir -p /data/hyperliquid/hl/data && mkdir -p /data/hyperliquid/scripts && chown -R $USERNAME:$USERNAME /data/hyperliquid/hl
 
 # Add our scripts
-COPY scripts/ /home/$USERNAME/scripts/
+COPY scripts/ /data/hyperliquid/scripts/
 # Add cron file
 COPY cron/ /etc/
 
 # Give execution rights on the cron jobs
 RUN chmod 0644 /etc/cron.d/* && \
-    chmod +x /home/$USERNAME/scripts/* && chown -R $USERNAME:$USERNAME /home/$USERNAME/scripts
+    chmod +x /data/hyperliquid/scripts/* && chown -R $USERNAME:$USERNAME /data/hyperliquid/scripts
 
 # Start cron service directly
 CMD ["bash", "-c", "crontab /etc/cron.d/prune && /usr/sbin/cron -f -L 15"]
