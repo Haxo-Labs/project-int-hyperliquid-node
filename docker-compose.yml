@@ -8,11 +8,11 @@ services:
     ports:
       - "4000-4010:4000-4010"
     volumes:
-      - /data/hyperliquid/hl-data:/home/hluser/hl/data
-      - ./override_gossip_config.json:/home/hluser/override_gossip_config.json
+      - /data/hyperliquid/hl-data:/data/hyperliquid/hl/data
+      - ./override_gossip_config.json:/data/hyperliquid/override_gossip_config.json
 
   pruner:
     restart: unless-stopped
     build: ./pruner
     volumes:
-      - /data/hyperliquid/hl-data:/home/hluser/hl/data
+      - /data/hyperliquid/hl-data:/data/hyperliquid/hl/data
