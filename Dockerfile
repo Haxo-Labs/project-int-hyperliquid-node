@@ -16,6 +16,9 @@ RUN groupadd --gid $USER_GID $USERNAME \
 
 # Create /data structure and give permission to hluser
 RUN mkdir -p /data/hyperliquid/hl/data/logs \
+    && mkdir -p /data/hyperliquid/tmp \
+    && mkdir -p /data/hyperliquid/hyperliquid_data \
+    && mkdir -p /data/hyperliquid/file_mod_time_tracker \
     && ln -s /data/hyperliquid/hl/data/logs /data/hyperliquid/hl/log \
     && chown -R $USERNAME:$USERNAME /data
 
@@ -23,7 +26,7 @@ RUN mkdir -p /data/hyperliquid/hl/data/logs \
 USER $USERNAME
 WORKDIR /data/hyperliquid
 
-# Create config file
+# Create visor config
 RUN echo '{"chain": "Mainnet"}' > /data/hyperliquid/visor.json
 
 # Import GPG public key
@@ -36,10 +39,13 @@ RUN curl -o /data/hyperliquid/hl-visor $HL_VISOR_URL \
     && gpg --verify /data/hyperliquid/hl-visor.asc /data/hyperliquid/hl-visor \
     && chmod +x /data/hyperliquid/hl-visor
 
-# Redirect hl's expected data directory to /data
+# Create /home/hluser/hl symlinks pointing to /data equivalents
 RUN mkdir -p /home/$USERNAME/hl \
     && rm -rf /home/$USERNAME/hl/data \
-    && ln -s /data/hyperliquid/hl/data /home/$USERNAME/hl/data
+    && ln -s /data/hyperliquid/hl/data /home/$USERNAME/hl/data \
+    && ln -s /data/hyperliquid/tmp /home/$USERNAME/hl/tmp \
+    && ln -s /data/hyperliquid/hyperliquid_data /home/$USERNAME/hl/hyperliquid_data \
+    && ln -s /data/hyperliquid/file_mod_time_tracker /home/$USERNAME/hl/file_mod_time_tracker
 
 EXPOSE 4000-4010
 

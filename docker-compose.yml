@@ -9,6 +9,9 @@ services:
       - "4000-4010:4000-4010"
     volumes:
       - /data/hyperliquid/hl-data:/data/hyperliquid/hl/data
+      - /data/hyperliquid/tmp:/data/hyperliquid/tmp
+      - /data/hyperliquid/hyperliquid_data:/data/hyperliquid/hyperliquid_data
+      - /data/hyperliquid/file_mod_time_tracker:/data/hyperliquid/file_mod_time_tracker
       - ./override_gossip_config.json:/data/hyperliquid/override_gossip_config.json
 
   pruner:
