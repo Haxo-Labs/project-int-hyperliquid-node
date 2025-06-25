@@ -14,7 +14,7 @@ RUN groupadd --gid $USER_GID $USERNAME \
     && apt-get update -y && apt-get install -y curl gnupg \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Create /data directory and give permission to hluser
+# Create /data structure and give permission to hluser
 RUN mkdir -p /data/hyperliquid/hl/data/logs \
     && ln -s /data/hyperliquid/hl/data/logs /data/hyperliquid/hl/log \
     && chown -R $USERNAME:$USERNAME /data
@@ -23,7 +23,7 @@ RUN mkdir -p /data/hyperliquid/hl/data/logs \
 USER $USERNAME
 WORKDIR /data/hyperliquid
 
-# Configure chain
+# Create config file
 RUN echo '{"chain": "Mainnet"}' > /data/hyperliquid/visor.json
 
 # Import GPG public key
@@ -35,6 +35,11 @@ RUN curl -o /data/hyperliquid/hl-visor $HL_VISOR_URL \
     && curl -o /data/hyperliquid/hl-visor.asc $HL_VISOR_ASC_URL \
     && gpg --verify /data/hyperliquid/hl-visor.asc /data/hyperliquid/hl-visor \
     && chmod +x /data/hyperliquid/hl-visor
+
+# Redirect hl's expected data directory to /data
+RUN mkdir -p /home/$USERNAME/hl \
+    && rm -rf /home/$USERNAME/hl/data \
+    && ln -s /data/hyperliquid/hl/data /home/$USERNAME/hl/data
 
 EXPOSE 4000-4010
 
