@@ -1,0 +1,26 @@
+name: Synchronize dev after main
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+
+permissions:
+  contents: read
+
+jobs:
+  synchronize-dev:
+    name: Synchronize dev
+    if: >-
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    uses: Haxo-Labs/github-actions/.github/workflows/sync-integration-after-main.yml@c39ff9a78eddcc3c7be9405be9b9b6509a5d3d57
+    with:
+      production_branch: main
+      integration_branch: dev
+    secrets:
+      RELEASE_SYNC_APP_ID: ${{ secrets.RELEASE_SYNC_APP_ID }}
+      RELEASE_SYNC_APP_PRIVATE_KEY: ${{ secrets.RELEASE_SYNC_APP_PRIVATE_KEY }}
+
